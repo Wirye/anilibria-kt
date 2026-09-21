@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.vanniktech.mavenPublish)
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 group = "com.github.wirye"
@@ -28,7 +29,18 @@ kotlin {
     }
 
     sourceSets {
-        commonMain.dependencies {}
+        jvmTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.kotlinx.coroutines.test)
+        }
+
+        commonMain.dependencies {
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.kotlinx.serialization.json)
+        }
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
