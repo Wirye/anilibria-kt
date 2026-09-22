@@ -24,7 +24,7 @@ data class UserProfile(
     val nickname: String? = null,
     val login: String? = null,
     val email: String? = null,
-    val avatar: UserAvatar? = null // <-- Меняем String? на UserAvatar?
+    val avatar: UserAvatar? = null
 )
 
 @Serializable
