@@ -18,7 +18,7 @@ kotlin {
 
     androidLibrary {
         namespace = "com.github.wirye.anilibriakt"
-        compileSdk = 37
+        compileSdk = 35
         minSdk = 24
 
         withJava()
