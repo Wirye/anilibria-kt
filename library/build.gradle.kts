@@ -46,6 +46,14 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
         }
 
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+        }
+
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.cio)
+        }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
