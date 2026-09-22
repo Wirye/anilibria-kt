@@ -1,12 +1,10 @@
 [versions]
-agp = "9.4.1"
-android-compileSdk = "37"
-android-minSdk = "24"
+agp = "8.13.2"
 kotlin = "2.0.21"
-vanniktech-maven-publish = "0.37.0"
-ktorVersion = "3.6.0"
-kotlinxSerialization = "1.1.0"
-coroutinesVersion = "1.9.0"
+vanniktech-maven-publish = "0.30.0"
+ktorVersion = "3.1.0"
+kotlinxSerialization = "1.8.0"
+coroutinesVersion = "1.10.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

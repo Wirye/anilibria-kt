@@ -1,3 +1,6 @@
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -12,10 +15,11 @@ version = "1.0.0"
 
 kotlin {
     jvm()
-    android {
+
+    androidLibrary {
         namespace = "com.github.wirye.anilibriakt"
-        compileSdk = libs.versions.android.compileSdk.get().toInt()
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        compileSdk = 37
+        minSdk = 24
 
         withJava()
         withHostTestBuilder {}.configure {}
@@ -51,7 +55,7 @@ kotlin {
 mavenPublishing {
     publishToMavenCentral()
 
-//    signAllPublications()
+//  signAllPublications()
 
     coordinates(group.toString(), "anilibria-kt", version.toString())
 
@@ -77,7 +81,7 @@ mavenPublishing {
         scm {
             url = "https://github.com/Wirye/anilibria-kt"
             connection = "scm:git:git://github.com/Wirye/anilibria-kt.git"
-            developerConnection = "scm:git:ssh://github.com/Wirye/anilibria-kt.git  "
+            developerConnection = "scm:git:ssh://github.com/Wirye/anilibria-kt.git"
         }
     }
 }
