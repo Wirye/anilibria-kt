@@ -11,11 +11,13 @@ import io.ktor.http.HttpStatusCode
 
 class SearchApi(
     private val httpClient: HttpClient,
-    private val tokenProvider: () -> String
+    private val tokenProvider: (suspend () -> String)? = null
 ) {
     suspend fun search(query: String, limit: Int): Result<List<Title>> = runCatching {
+        val token = if (tokenProvider != null) tokenProvider() else ""
+
         val response = httpClient.get("https://anilibria.top/api/v1/app/search/releases") {
-            val token = tokenProvider()
+
             if (token.isNotBlank()) {
                 bearerAuth(token)
             }
@@ -37,8 +39,9 @@ class SearchApi(
     * @return Результат поиска в виде списка названий
     * */
     suspend fun getOffers(query: String, limit: Int): Result<List<SearchOffer>> = runCatching {
+        val token = if (tokenProvider != null) tokenProvider() else ""
+
         val response = httpClient.get("https://anilibria.top/api/v1/app/search/releases") {
-            val token = tokenProvider()
             if (token.isNotBlank()) {
                 bearerAuth(token)
             }

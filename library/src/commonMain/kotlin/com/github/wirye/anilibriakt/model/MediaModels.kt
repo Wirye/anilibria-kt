@@ -1,5 +1,6 @@
 package com.github.wirye.anilibriakt.model
 
+import com.github.wirye.anilibriakt.model.utils.toTitleGenres
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -31,6 +32,7 @@ data class Title(
     @SerialName("is_in_production") val isInProduction: Boolean? = null,
     @SerialName("is_blocked_by_geo") val isBlockedByGeo: Boolean? = null,
     @SerialName("is_blocked_by_copyrights") val isBlockedByCopyrights: Boolean? = null,
+    @SerialName("publish_day") val publishDay: PublishDay? = null,
     val shikimori: ExternalRating? = null,
     val mal: ExternalRating? = null
 )
@@ -41,10 +43,51 @@ data class ListOfTitles(
 )
 
 @Serializable
+enum class Day {
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+}
+
+@Serializable
+data class PublishDay(
+    val value: String? = null,
+    val description: String? = null
+) {
+    val getValue: Day?
+        get() = when (value) {
+            "Понедельник" -> Day.MONDAY
+            "Вторник" -> Day.TUESDAY
+            "Среда" -> Day.WEDNESDAY
+            "Четверг" -> Day.THURSDAY
+            "Пятница" -> Day.FRIDAY
+            "Суббота" -> Day.SATURDAY
+            "Воскресенье" -> Day.SUNDAY
+            else -> null
+        }
+}
+
+@Serializable
+enum class TitleTypes {
+    TV, ONA, WEB, OVA, OAD, MOVIE, DORAMA, SPECIAL
+}
+
+@Serializable
 data class TitleType(
     val value: String? = null,
     val description: String? = null
-)
+) {
+    val getValue: TitleTypes?
+        get() = when (value) {
+            "TV" -> TitleTypes.TV
+            "ONA" -> TitleTypes.ONA
+            "WEB" -> TitleTypes.WEB
+            "OVA" -> TitleTypes.OVA
+            "OAD" -> TitleTypes.OAD
+            "MOVIE" -> TitleTypes.MOVIE
+            "DORAMA" -> TitleTypes.DORAMA
+            "SPECIAL" -> TitleTypes.SPECIAL
+            else -> null
+        }
+}
 
 @Serializable
 data class TitleName(
@@ -74,10 +117,26 @@ data class TitleSeason(
 }
 
 @Serializable
+enum class AgeRatings {
+    R0_PLUS, R6_PLUS, R12_PLUS, R16_PLUS, R18_PLUS
+}
+
+@Serializable
 data class AgeRating(
-    val label: String? = null,      // Сама надпись 16+
-    @SerialName("is_adult") val isAdult: Boolean? = null,   // Если 18+ и больше, то это true
-)
+    val value: String? = null,
+    val label: String? = null,
+    @SerialName("is_adult") val isAdult: Boolean? = null,
+) {
+    val getValue: AgeRatings?
+        get() = when (label) {
+            "R0_PLUS" -> AgeRatings.R0_PLUS
+            "R6_PLUS" -> AgeRatings.R6_PLUS
+            "R12_PLUS" -> AgeRatings.R12_PLUS
+            "R16_PLUS" -> AgeRatings.R16_PLUS
+            "R18_PLUS" -> AgeRatings.R18_PLUS
+            else -> null
+        }
+}
 
 @Serializable
 data class ExternalRating(
@@ -104,12 +163,23 @@ data class TitlePosterOptimized(
 }
 
 @Serializable
+enum class TitleGenres {
+    COMEDY, MECHA, PSYCHOLOGICAL, SHONEN, SEINEN, TRILLER, SCHOOL, DRAMA, MYSTERY, EVERYDAYLIFE, ROMANCE,
+    SPORT, HORROR, ACTION, MARTIALARTS, DEMONS, GAMES, MAGIC, MUSIC, SHOUJO, SUPERPOWER, FANTASTIC, ETTY,
+    VAMPIRES, DETECTIVE, HISTORICAL, ADVENTURES, MYSTICISM, FANTASY, CYBERPUNK, GIRLSLOVE, HAREM, JOSEI,
+    ISEKAI
+}
+
+@Serializable
 data class TitleGenre(
     val id: Long,
     val name: String? = null,
     val image: TitlePoster? = null,
     @SerialName("total_releases") val totalReleases: Long? = null,
-)
+) {
+    val getValue: TitleGenres?
+        get() = id.toTitleGenres()
+}
 
 @Serializable
 data class TitleSponsor(

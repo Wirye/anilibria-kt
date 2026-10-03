@@ -20,7 +20,7 @@ import io.ktor.http.contentType
 
 class AuthApi internal constructor(
     private val httpClient: HttpClient,
-    private val tokenProvider: () -> String
+    private val tokenProvider: (suspend () -> String)? = null
 ) {
     /**
      * Авторизация
@@ -54,14 +54,42 @@ class AuthApi internal constructor(
         }
     }
 
+    suspend fun logout(): Result<Unit> = runCatching {
+        val token = if (tokenProvider != null) {
+            tokenProvider()
+        } else ""
+
+        val response = httpClient.post("https://anilibria.top/api/v1/accounts/users/auth/logout") {
+            if (token.isNotEmpty()) {
+                bearerAuth(token)
+            }
+        }
+
+        when (response.status) {
+            HttpStatusCode.OK -> {}
+
+            HttpStatusCode.Forbidden -> throw AniLibriaException.InvalidCredentialsException()
+            HttpStatusCode.Unauthorized -> throw AniLibriaException.InvalidCredentialsException()
+            HttpStatusCode.UnprocessableEntity -> throw AniLibriaException.ValidationErrorException()
+            else -> throw AniLibriaException.ServerErrorException(response.status.value)
+        }
+    }
+
     /**
      * Получение профиля
      */
     suspend fun getProfile(
         requestedData: List<UserProfileFields>
     ): Result<UserProfile> = runCatching {
+        val token = if (tokenProvider != null) {
+            tokenProvider()
+        } else ""
+
         val response = httpClient.get("https://anilibria.top/api/v1/accounts/users/me/profile") {
-            bearerAuth(tokenProvider())
+            if (token.isNotEmpty()) {
+                bearerAuth(token)
+            }
+
 
             if (requestedData.isNotEmpty()) {
                 url.parameters.append(

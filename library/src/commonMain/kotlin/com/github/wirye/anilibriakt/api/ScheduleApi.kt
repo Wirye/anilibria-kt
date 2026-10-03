@@ -1,22 +1,22 @@
 package com.github.wirye.anilibriakt.api
 
 import com.github.wirye.anilibriakt.exception.AniLibriaException
-import com.github.wirye.anilibriakt.model.Episode
-import com.github.wirye.anilibriakt.model.EpisodeUserWatchedWithTimecode
+import com.github.wirye.anilibriakt.model.Schedule
+import com.github.wirye.anilibriakt.model.ScheduleRelease
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
 
-class EpisodesApi(
+class ScheduleApi(
     private val tokenProvider: (suspend () -> String)? = null,
     private val httpClient: HttpClient
 ) {
-    suspend fun getEpisodeUserWatchedTimecodes(episodeId: String): Result<EpisodeUserWatchedWithTimecode> = runCatching {
+    suspend fun getSchedule(): Result<Schedule> = runCatching {
         val token = if (tokenProvider != null) tokenProvider() else ""
 
-        val result = httpClient.get("https://anilibria.top/api/v1/anime/releases/episodes/$episodeId/timecode") {
+        val result = httpClient.get("https://anilibria.top/api/v1/anime/schedule/now") {
             if (token.isNotBlank()) {
                 bearerAuth(token)
             }
@@ -33,10 +33,10 @@ class EpisodesApi(
         }
     }
 
-    suspend fun getEpisode(episodeId: String): Result<Episode> = runCatching {
+    suspend fun getWeekSchedule(): Result<List<ScheduleRelease>> = runCatching {
         val token = if (tokenProvider != null) tokenProvider() else ""
 
-        val result = httpClient.get("https://anilibria.top/api/v1/anime/releases/episodes/$episodeId") {
+        val result = httpClient.get("https://anilibria.top/api/v1/anime/schedule/week") {
             if (token.isNotBlank()) {
                 bearerAuth(token)
             }

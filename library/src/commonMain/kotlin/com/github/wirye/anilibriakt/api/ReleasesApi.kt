@@ -1,7 +1,7 @@
 package com.github.wirye.anilibriakt.api
 
 import com.github.wirye.anilibriakt.exception.AniLibriaException
-import com.github.wirye.anilibriakt.model.EpisodeUserWatchedTimecode
+import com.github.wirye.anilibriakt.model.EpisodeUserWatchedWithTimecode
 import com.github.wirye.anilibriakt.model.ListOfTitles
 import com.github.wirye.anilibriakt.model.Member
 import com.github.wirye.anilibriakt.model.Title
@@ -12,16 +12,21 @@ import io.ktor.client.request.get
 import io.ktor.http.HttpStatusCode
 
 class ReleasesApi(
-    private val tokenProvider: () -> String,
+    private val tokenProvider: (suspend () -> String)? = null,
     private val httpClient: HttpClient
 ) {
     val episodes: EpisodesApi = EpisodesApi(tokenProvider = tokenProvider, httpClient = httpClient)
+    val schedule: ScheduleApi = ScheduleApi(tokenProvider = tokenProvider, httpClient = httpClient)
+    val genres: GenresApi = GenresApi(tokenProvider = tokenProvider, httpClient = httpClient)
+    val franchises: Franchises = Franchises(tokenProvider = tokenProvider, httpClient = httpClient)
+    val ratings: RatingsApi = RatingsApi(tokenProvider = tokenProvider, httpClient = httpClient)
 
     suspend fun recommended(limit: Int, releaseId: Long): Result<List<Title>> = runCatching {
+        val token = if (tokenProvider != null) tokenProvider() else ""
+
         val result = httpClient.get("https://anilibria.top/api/v1/anime/releases/recommended") {
-            val token = tokenProvider()
             if (token.isNotBlank()) {
-                bearerAuth(tokenProvider())
+                bearerAuth(token)
             }
 
             url.parameters.append("limit", limit.toString())
@@ -40,10 +45,11 @@ class ReleasesApi(
     }
 
     suspend fun latest(limit: Int): Result<List<Title>> = runCatching {
+        val token = if (tokenProvider != null) tokenProvider() else ""
+
         val result = httpClient.get("https://anilibria.top/api/v1/anime/releases/latest") {
-            val token = tokenProvider()
             if (token.isNotBlank()) {
-                bearerAuth(tokenProvider())
+                bearerAuth(token)
             }
 
             url.parameters.append("limit", limit.toString())
@@ -61,10 +67,11 @@ class ReleasesApi(
     }
 
     suspend fun getRelease(id: Long): Result<Title> = runCatching {
+        val token = if (tokenProvider != null) tokenProvider() else ""
+
         val result = httpClient.get("https://anilibria.top/api/v1/anime/releases/$id") {
-            val token = tokenProvider()
             if (token.isNotBlank()) {
-                bearerAuth(tokenProvider())
+                bearerAuth(token)
             }
         }
 
@@ -80,10 +87,11 @@ class ReleasesApi(
     }
 
     suspend fun getReleaseMembers(id: Long): Result<List<Member>> = runCatching {
+        val token = if (tokenProvider != null) tokenProvider() else ""
+
         val result = httpClient.get("https://anilibria.top/api/v1/anime/releases/$id/members") {
-            val token = tokenProvider()
             if (token.isNotBlank()) {
-                bearerAuth(tokenProvider())
+                bearerAuth(token)
             }
         }
 
@@ -98,11 +106,12 @@ class ReleasesApi(
         }
     }
 
-    suspend fun getReleaseEpisodesUserWatchedTimecodes(id: Long): Result<List<EpisodeUserWatchedTimecode>> = runCatching {
+    suspend fun getReleaseEpisodesUserWatchedTimecodes(id: Long): Result<List<EpisodeUserWatchedWithTimecode>> = runCatching {
+        val token = if (tokenProvider != null) tokenProvider() else ""
+
         val result = httpClient.get("https://anilibria.top/api/v1/anime/releases/$id/episodes/timecodes") {
-            val token = tokenProvider()
             if (token.isNotBlank()) {
-                bearerAuth(tokenProvider())
+                bearerAuth(token)
             }
         }
 
@@ -118,10 +127,11 @@ class ReleasesApi(
     }
 
     suspend fun getRandomReleases(limit: Int): Result<List<Title>> = runCatching {
+        val token = if (tokenProvider != null) tokenProvider() else ""
+
         val result = httpClient.get("https://anilibria.top/api/v1/anime/releases/random") {
-            val token = tokenProvider()
             if (token.isNotBlank()) {
-                bearerAuth(tokenProvider())
+                bearerAuth(token)
             }
 
             url.parameters.append("limit", limit.toString())
@@ -139,10 +149,11 @@ class ReleasesApi(
     }
 
     suspend fun getManyReleases(ids: List<Long>): Result<ListOfTitles> = runCatching {
+        val token = if (tokenProvider != null) tokenProvider() else ""
+
         val result = httpClient.get("https://anilibria.top/api/v1/anime/releases/list") {
-            val token = tokenProvider()
             if (token.isNotBlank()) {
-                bearerAuth(tokenProvider())
+                bearerAuth(token)
             }
 
             url.parameters.append("ids", ids.joinToString(","))
