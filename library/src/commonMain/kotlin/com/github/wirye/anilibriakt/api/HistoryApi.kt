@@ -9,12 +9,10 @@ import io.ktor.client.call.body
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import kotlinx.serialization.SerialName
@@ -92,10 +90,7 @@ class HistoryApi(
         val timecodes = timecodes.map { EpisodeTimecodeRequest(it.episodeId, it.timecode, it.isWatched) }
 
         val result = httpClient.post("https://anilibria.top/api/v1/accounts/users/me/views/timecodes") {
-            header(
-                HttpHeaders.UserAgent,
-                "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36"
-            )
+
             contentType(ContentType.Application.Json)
 
             if (token.isNotBlank()) {
@@ -126,10 +121,6 @@ class HistoryApi(
         val timecodes = timecodes.map { DeleteTimecodesRequest(it) }
 
         val result = httpClient.delete("https://anilibria.top/api/v1/accounts/users/me/views/timecodes") {
-            header(
-                HttpHeaders.UserAgent,
-                "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36"
-            )
 
             contentType(ContentType.Application.Json)
 

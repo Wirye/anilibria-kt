@@ -11,7 +11,8 @@ import kotlin.test.assertTrue
 
 class RealApiIntegrationTest {
 
-    private val client = AniLibriaClient(tokenProvider = { "erAhpXI3vhcUw7fdxv8yErtkC2HbHCV0" }, passkeyProvider = { "" })
+    // Some test may be failed due to logout test, please test logout separated
+    private val client = AniLibriaClient(tokenProvider = { "your auth token" }, passkeyProvider = { "" })
 
     @Test
     fun `real login with wrong password returns InvalidCredentialsException`(): Unit = runTest {
@@ -537,7 +538,7 @@ class RealApiIntegrationTest {
 
     @Test
     fun `get torrent by id test`(): Unit = runTest {
-        val result = client.torrents.getTorrent(idOrHash = "40201")
+        val result = client.torrents.getTorrent(idOrHash = "40216")
 
         println(">>> Result isSuccess: ${result.isSuccess}")
         println(">>> Result: $result")
@@ -549,7 +550,7 @@ class RealApiIntegrationTest {
 
     @Test
     fun `get torrent by hash test`(): Unit = runTest {
-        val result = client.torrents.getTorrent(idOrHash = "47d4ffd6218b45aeb0b5606b8856a912cbf39c1b")
+        val result = client.torrents.getTorrent(idOrHash = "a418383856abd7edca550dbcf615bdb443a78a1e")
 
         println(">>> Result isSuccess: ${result.isSuccess}")
         println(">>> Result: $result")

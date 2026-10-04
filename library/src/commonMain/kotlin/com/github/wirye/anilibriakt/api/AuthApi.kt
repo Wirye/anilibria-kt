@@ -3,18 +3,16 @@ package com.github.wirye.anilibriakt.api
 import com.github.wirye.anilibriakt.exception.AniLibriaException
 import com.github.wirye.anilibriakt.model.AuthResponse
 import com.github.wirye.anilibriakt.model.LoginRequest
-import com.github.wirye.anilibriakt.model.UserProfileFields
 import com.github.wirye.anilibriakt.model.UserProfile
+import com.github.wirye.anilibriakt.model.UserProfileFields
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 
@@ -28,10 +26,7 @@ class AuthApi internal constructor(
     suspend fun login(login: String, password: String): Result<String> = runCatching {
         val response = httpClient.post("https://anilibria.top/api/v1/accounts/users/auth/login") {
             contentType(ContentType.Application.Json)
-            header(
-                HttpHeaders.UserAgent,
-                "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36"
-            )
+
             setBody(LoginRequest(login = login, password = password))
         }
 
