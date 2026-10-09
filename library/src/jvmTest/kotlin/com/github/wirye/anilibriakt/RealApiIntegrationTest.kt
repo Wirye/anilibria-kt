@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
 class RealApiIntegrationTest {
 
     // Some test may be failed due to logout test, please test logout separated
-    private val client = AniLibriaClient(tokenProvider = { "your auth token" }, passkeyProvider = { "" })
+    private val client = AniLibriaClient(userAgent = "AniLibriaKtLibary/1.1.4 ( https://github.com/Wirye/anilibria-kt )", tokenProvider = { "your auth token" }, passkeyProvider = { "" })
 
     @Test
     fun `real login with wrong password returns InvalidCredentialsException`(): Unit = runTest {
