@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 
 // build.gradle.kts
 dependencies {
-    implementation("com.github.Wirye.anilibria-kt:anilibria-kt:1.1.2")
+    implementation("com.github.Wirye.anilibria-kt:anilibria-kt:1.1.3")
 }
 ```
 
